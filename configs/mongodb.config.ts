@@ -11,8 +11,8 @@ export const getMongoDBConfig = async (
 
 const getMongoDBConnectionString = (configService: ConfigService): string =>
   'mongodb+srv://' +
-  configService.get('MONGO_USERNAME') +
+  configService.get<string>('MONGO_USERNAME') +
   ':' +
-  configService.get('MONGO_PASSWORD') +
+  configService.get<string>('MONGO_PASSWORD') +
   '@nodemongo.p3r9u.mongodb.net/' +
-  configService.get('MONGO_DB');
+  configService.get<string>('MONGO_DB');
