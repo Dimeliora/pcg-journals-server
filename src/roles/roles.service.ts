@@ -11,11 +11,13 @@ export class RolesService {
 
   async getRoleByValue(value: string): Promise<Role> {
     const role = await this.roleModel.findOne({ value }).exec();
+
     return role;
   }
 
   async createRole(createRoleDto: CreateRoleDTO): Promise<Role> {
     const role = await this.roleModel.create(createRoleDto);
+
     return role;
   }
 }

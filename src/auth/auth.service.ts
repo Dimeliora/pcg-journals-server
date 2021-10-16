@@ -14,6 +14,7 @@ import {
   USER_NOT_FOUND_ERROR,
 } from './auth.constants';
 import { User } from 'src/users/schemas/user.schema';
+import { IToken } from './interfaces/token.interface';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +40,7 @@ export class AuthService {
     return user;
   }
 
-  private async generateToken({ username, roles }: User) {
+  private async generateToken({ username, roles }: User): Promise<IToken> {
     const payload = { username, roles };
 
     return {
@@ -47,7 +48,7 @@ export class AuthService {
     };
   }
 
-  async register({ username, password }: CreateUserDTO) {
+  async register({ username, password }: CreateUserDTO): Promise<User> {
     const candidate = await this.usersService.getUserByUsername(username);
 
     if (candidate) {
@@ -61,7 +62,7 @@ export class AuthService {
     return user;
   }
 
-  async login({ username, password }: CreateUserDTO) {
+  async login({ username, password }: CreateUserDTO): Promise<IToken> {
     const user = await this.validateUser(username, password);
 
     return this.generateToken(user);

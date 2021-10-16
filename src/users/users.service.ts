@@ -18,6 +18,7 @@ export class UsersService {
       .select('-passwordHash -__v')
       .populate('roles')
       .exec();
+
     return users;
   }
 
@@ -26,6 +27,7 @@ export class UsersService {
       .findOne({ username })
       .populate('roles')
       .exec();
+
     return user;
   }
 
