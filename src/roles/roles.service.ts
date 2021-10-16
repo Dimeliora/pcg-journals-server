@@ -9,7 +9,7 @@ import { CreateRoleDTO } from './dto/create-role.dto';
 export class RolesService {
   constructor(@InjectModel(Role.name) private roleModel: Model<RoleDocument>) {}
 
-  async getRole(value: string): Promise<Role> {
+  async getRoleByValue(value: string): Promise<Role> {
     const role = await this.roleModel.findOne({ value }).exec();
     return role;
   }
