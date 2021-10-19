@@ -1,9 +1,10 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Role, RoleDocument } from './schemas/role.schema';
 import { CreateRoleDTO } from './dto/create-role.dto';
+import { ROLE_ALREADY_EXISTS_ERROR } from './roles.constants';
 
 @Injectable()
 export class RolesService {
@@ -16,8 +17,12 @@ export class RolesService {
   }
 
   async createRole(createRoleDto: CreateRoleDTO): Promise<Role> {
-    const role = await this.roleModel.create(createRoleDto);
+    try {
+      const role = await this.roleModel.create(createRoleDto);
 
-    return role;
+      return role;
+    } catch (error) {
+      throw new BadRequestException(ROLE_ALREADY_EXISTS_ERROR);
+    }
   }
 }

@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { USER_NOT_AUTHORIZED } from '../auth.constants';
+import { USER_NOT_AUTHORIZED_ERROR } from '../auth.constants';
 import { IPayload } from '../interfaces/payload.interface';
 
 @Injectable()
 export class JWTGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
     try {
@@ -23,12 +23,12 @@ export class JWTGuard implements CanActivate {
         throw new Error();
       }
 
-      const payload = this.jwtService.verify<IPayload>(token);
+      const payload = await this.jwtService.verifyAsync<IPayload>(token);
       request.user = payload;
 
       return true;
     } catch (error) {
-      throw new UnauthorizedException(USER_NOT_AUTHORIZED);
+      throw new UnauthorizedException(USER_NOT_AUTHORIZED_ERROR);
     }
   }
 }

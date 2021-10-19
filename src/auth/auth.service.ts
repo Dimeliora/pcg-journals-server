@@ -2,12 +2,13 @@ import {
   Injectable,
   BadRequestException,
   UnauthorizedException,
+  NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { genSalt, hash, compare } from 'bcryptjs';
 
 import { UsersService } from '../users/users.service';
-import { CreateUserDTO } from '../users/dto/create-user.dto';
+import { AuthDTO } from './dto/auth.dto';
 import {
   INVALID_PASSWORD_ERROR,
   USER_ALREADY_EXISTS_ERROR,
@@ -29,7 +30,7 @@ export class AuthService {
   ): Promise<User> {
     const user = await this.usersService.getUserByUsername(username);
     if (!user) {
-      throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
+      throw new NotFoundException(USER_NOT_FOUND_ERROR);
     }
 
     const isPasswordValid = await compare(password, user.passwordHash);
@@ -40,15 +41,18 @@ export class AuthService {
     return user;
   }
 
-  private async generateToken({ username, roles }: User): Promise<IToken> {
-    const payload = { username, roles };
+  private async generateToken({ _id, username, roles }: User): Promise<IToken> {
+    const payload = { id: _id, username, roles };
 
     return {
-      token: this.jwtService.sign(payload),
+      access_token: await this.jwtService.signAsync(payload),
     };
   }
 
-  async register({ username, password }: CreateUserDTO): Promise<User> {
+  async register({
+    username,
+    password,
+  }: AuthDTO): Promise<Omit<User, 'passwordHash'>> {
     const candidate = await this.usersService.getUserByUsername(username);
 
     if (candidate) {
@@ -58,11 +62,12 @@ export class AuthService {
     const salt = await genSalt(8);
     const passwordHash = await hash(password, salt);
 
-    const user = await this.usersService.createUser({ username, passwordHash });
-    return user;
+    const user = await this.usersService.createUser(username, passwordHash);
+
+    return { _id: user._id, username: user.username, roles: user.roles };
   }
 
-  async login({ username, password }: CreateUserDTO): Promise<IToken> {
+  async login({ username, password }: AuthDTO): Promise<IToken> {
     const user = await this.validateUser(username, password);
 
     return this.generateToken(user);

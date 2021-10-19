@@ -1,24 +1,40 @@
-import { UseGuards, Controller, Param, Get } from '@nestjs/common';
+import {
+  UseGuards,
+  Controller,
+  Body,
+  Param,
+  Get,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 
 import { UsersService } from './users.service';
-// import { JWTGuard } from '../auth/guards/jwt.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { UpdatePasswordDTO } from './dto/update-password.dto';
+import { ValidationPipe } from '../pipes/validation.pipe';
 
-// @UseGuards(JWTGuard)
+@UseGuards(RolesGuard)
+@Roles('ADMIN')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Roles('ADMIN')
-  @UseGuards(RolesGuard)
   @Get()
   getAllUsers() {
     return this.usersService.getAllUsers();
   }
 
-  @Get(':username')
-  getUserByUsername(@Param('username') username: string) {
-    return this.usersService.getUserByUsername(username);
+  @Delete(':id')
+  deleteUser(@Param('id') id: string) {
+    return this.usersService.deleteUser(id);
+  }
+
+  @Patch(':id')
+  updateUserPassword(
+    @Param('id') id: string,
+    @Body(new ValidationPipe()) { password }: UpdatePasswordDTO,
+  ) {
+    return this.usersService.updateUserPassword(id, password);
   }
 }

@@ -9,7 +9,10 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
 import { ROLES_KEY } from '../decorators/roles.decorator';
-import { FORBIDDEN_ROUTE_ERROR, USER_NOT_AUTHORIZED } from '../auth.constants';
+import {
+  FORBIDDEN_ROUTE_ERROR,
+  USER_NOT_AUTHORIZED_ERROR,
+} from '../auth.constants';
 import { IPayload } from '../interfaces/payload.interface';
 
 @Injectable()
@@ -19,7 +22,7 @@ export class RolesGuard implements CanActivate {
     private reflector: Reflector,
   ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRoles = this.reflector.getAllAndOverride<string[]>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
@@ -38,7 +41,7 @@ export class RolesGuard implements CanActivate {
         throw new Error();
       }
 
-      const payload = this.jwtService.verify<IPayload>(token);
+      const payload = await this.jwtService.verifyAsync<IPayload>(token);
       request.user = payload;
 
       const hasPermission = payload.roles.some((role) =>
@@ -54,7 +57,7 @@ export class RolesGuard implements CanActivate {
         throw error;
       }
 
-      throw new UnauthorizedException(USER_NOT_AUTHORIZED);
+      throw new UnauthorizedException(USER_NOT_AUTHORIZED_ERROR);
     }
   }
 }

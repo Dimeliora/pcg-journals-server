@@ -1,8 +1,8 @@
 {
   "name": "pcg-journals-server",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "REST API for PCG Journals project",
+  "author": "dimeliora",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -28,6 +28,8 @@
     "@nestjs/mongoose": "^9.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "mongoose": "^6.0.10",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

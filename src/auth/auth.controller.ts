@@ -1,19 +1,33 @@
-import { Controller, Body, Post } from '@nestjs/common';
+import {
+  UsePipes,
+  UseGuards,
+  Controller,
+  Body,
+  Post,
+  HttpCode,
+} from '@nestjs/common';
 
 import { AuthService } from './auth.service';
-import { CreateUserDTO } from '../users/dto/create-user.dto';
+import { AuthDTO } from './dto/auth.dto';
+import { ValidationPipe } from '../pipes/validation.pipe';
+import { Roles } from './decorators/roles.decorator';
+import { RolesGuard } from './guards/roles.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @UsePipes(ValidationPipe)
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @Post('register')
-  register(@Body() createUserDto: CreateUserDTO) {
-    return this.authService.register(createUserDto);
+  register(@Body() authDto: AuthDTO) {
+    return this.authService.register(authDto);
   }
 
   @Post('login')
-  login(@Body() createUserDto: CreateUserDTO) {
-    return this.authService.login(createUserDto);
+  @HttpCode(200)
+  login(@Body() authDto: AuthDTO) {
+    return this.authService.login(authDto);
   }
 }
