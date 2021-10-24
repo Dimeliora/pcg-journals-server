@@ -8,14 +8,16 @@ import { JwtService } from '@nestjs/jwt';
 import { genSalt, hash, compare } from 'bcryptjs';
 
 import { UsersService } from '../users/users.service';
-import { AuthDTO } from './dto/auth.dto';
+
 import {
   INVALID_PASSWORD_ERROR,
   USER_ALREADY_EXISTS_ERROR,
   USER_NOT_FOUND_ERROR,
 } from './auth.constants';
+import { AuthDTO } from './dto/auth.dto';
 import { User } from 'src/users/schemas/user.schema';
-import { IToken } from './interfaces/token.interface';
+import { SafeUser } from 'src/users/interfaces/safeUser.interface';
+import { IAuthentication } from './interfaces/authentication.interface';
 
 @Injectable()
 export class AuthService {
@@ -41,18 +43,17 @@ export class AuthService {
     return user;
   }
 
-  private async generateToken({ _id, username, roles }: User): Promise<IToken> {
-    const payload = { id: _id, username, roles };
+  private async generateToken({
+    _id,
+    username,
+    roles,
+  }: SafeUser): Promise<string> {
+    const payload = { _id, username, roles };
 
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    return await this.jwtService.signAsync(payload);
   }
 
-  async register({
-    username,
-    password,
-  }: AuthDTO): Promise<Omit<User, 'passwordHash'>> {
+  async register({ username, password }: AuthDTO): Promise<SafeUser> {
     const candidate = await this.usersService.getUserByUsername(username);
 
     if (candidate) {
@@ -67,9 +68,26 @@ export class AuthService {
     return { _id: user._id, username: user.username, roles: user.roles };
   }
 
-  async login({ username, password }: AuthDTO): Promise<IToken> {
+  async authenticate({
+    _id,
+    username,
+    roles,
+  }: SafeUser): Promise<IAuthentication> {
+    const access_token = await this.generateToken({ _id, username, roles });
+
+    return {
+      access_token,
+      user: {
+        _id,
+        username,
+        roles,
+      },
+    };
+  }
+
+  async login({ username, password }: AuthDTO): Promise<IAuthentication> {
     const user = await this.validateUser(username, password);
 
-    return this.generateToken(user);
+    return this.authenticate(user);
   }
 }
