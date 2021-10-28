@@ -3,9 +3,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { genSalt, hash } from 'bcryptjs';
 
-import { User, UserDocument } from './schemas/user.schema';
 import { RolesService } from '../roles/roles.service';
+import { User, UserDocument } from './schemas/user.schema';
+import { ISuccessMessage } from '../interfaces/successMessage.interface';
 import { USER_NOT_FOUND_ERROR } from '../auth/auth.constants';
+import {
+  getUserPasswordUpdatedMessage,
+  getUserDeletedMessage,
+} from './user.constants';
 
 @Injectable()
 export class UsersService {
@@ -56,18 +61,23 @@ export class UsersService {
     return user;
   }
 
-  async deleteUser(id: string): Promise<void> {
+  async deleteUser(id: string): Promise<ISuccessMessage> {
     const user = await this.getUserById(id);
 
     await user.delete();
+    return { message: getUserDeletedMessage(user.username) };
   }
 
-  async updateUserPassword(id: string, password: string): Promise<void> {
+  async updateUserPassword(
+    id: string,
+    password: string,
+  ): Promise<ISuccessMessage> {
     const user = await this.getUserById(id);
 
     const salt = await genSalt(8);
     const passwordHash = await hash(password, salt);
 
     await user.updateOne({ passwordHash });
+    return { message: getUserPasswordUpdatedMessage(user.username) };
   }
 }
