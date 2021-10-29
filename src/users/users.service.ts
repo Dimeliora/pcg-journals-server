@@ -6,6 +6,7 @@ import { genSalt, hash } from 'bcryptjs';
 import { RolesService } from '../roles/roles.service';
 import { User, UserDocument } from './schemas/user.schema';
 import { ISuccessMessage } from '../interfaces/successMessage.interface';
+import { SafeUser } from '../users/interfaces/safeUser.interface';
 import { USER_NOT_FOUND_ERROR } from '../auth/auth.constants';
 import {
   getUserPasswordUpdatedMessage,
@@ -19,7 +20,7 @@ export class UsersService {
     private readonly rolesService: RolesService,
   ) {}
 
-  private async getUserById(id: string): Promise<User & Document> {
+  private async getUserById(id: string): Promise<UserDocument> {
     try {
       const user = await this.userModel.findById(id).exec();
       if (!user) {
@@ -32,7 +33,7 @@ export class UsersService {
     }
   }
 
-  async getUserByUsername(username: string): Promise<User> {
+  async getUserByUsername(username: string): Promise<UserDocument> {
     const user = await this.userModel
       .findOne({ username })
       .populate('roles')
@@ -41,7 +42,7 @@ export class UsersService {
     return user;
   }
 
-  async getAllUsers(): Promise<User[]> {
+  async getAllUsers(): Promise<UserDocument[]> {
     const users = await this.userModel
       .find()
       .select('-passwordHash -__v')
@@ -51,14 +52,21 @@ export class UsersService {
     return users;
   }
 
-  async createUser(username: string, passwordHash: string): Promise<User> {
+  async createUser(
+    username: string,
+    passwordHash: string,
+  ): Promise<UserDocument> {
     const user = new this.userModel({ username, passwordHash });
 
     const role = await this.rolesService.getRoleByValue('USER');
     user.roles = [role];
     await user.save();
 
-    return user;
+    return await this.userModel
+      .findOne({ username })
+      .select('-passwordHash -__v')
+      .populate('roles')
+      .exec();
   }
 
   async deleteUser(id: string): Promise<ISuccessMessage> {

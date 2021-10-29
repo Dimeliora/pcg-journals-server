@@ -11,11 +11,11 @@ import { UsersService } from '../users/users.service';
 
 import {
   INVALID_PASSWORD_ERROR,
-  USER_ALREADY_EXISTS_ERROR,
   USER_NOT_FOUND_ERROR,
+  getUserAlreadyExistsError,
 } from './auth.constants';
 import { AuthDTO } from './dto/auth.dto';
-import { User } from 'src/users/schemas/user.schema';
+import { UserDocument } from 'src/users/schemas/user.schema';
 import { SafeUser } from 'src/users/interfaces/safeUser.interface';
 import { IAuthentication } from './interfaces/authentication.interface';
 
@@ -29,7 +29,7 @@ export class AuthService {
   private async validateUser(
     username: string,
     password: string,
-  ): Promise<User> {
+  ): Promise<UserDocument> {
     const user = await this.usersService.getUserByUsername(username);
     if (!user) {
       throw new NotFoundException(USER_NOT_FOUND_ERROR);
@@ -53,19 +53,17 @@ export class AuthService {
     return await this.jwtService.signAsync(payload);
   }
 
-  async register({ username, password }: AuthDTO): Promise<SafeUser> {
+  async register({ username, password }: AuthDTO): Promise<UserDocument> {
     const candidate = await this.usersService.getUserByUsername(username);
 
     if (candidate) {
-      throw new BadRequestException(USER_ALREADY_EXISTS_ERROR);
+      throw new BadRequestException(getUserAlreadyExistsError(username));
     }
 
     const salt = await genSalt(8);
     const passwordHash = await hash(password, salt);
 
-    const user = await this.usersService.createUser(username, passwordHash);
-
-    return { _id: user._id, username: user.username, roles: user.roles };
+    return this.usersService.createUser(username, passwordHash);
   }
 
   async authenticate({
