@@ -15,7 +15,7 @@ import { ValidationPipe } from '../pipes/validation.pipe';
 import { Roles } from './decorators/roles.decorator';
 import { RolesGuard } from './guards/roles.guard';
 import { JWTGuard } from './guards/jwt.guard';
-import { IRequestWithUser } from './interfaces/request.interface';
+import { IRequestWithUser } from '../interfaces/requestWithUser.interface';
 
 @Controller('auth')
 export class AuthController {

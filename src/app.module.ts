@@ -6,6 +6,7 @@ import { getMongoDBConfig } from './configs/mongodb.config';
 import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ComputersModule } from './computers/computers.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
     RolesModule,
     UsersModule,
     AuthModule,
+    ComputersModule,
   ],
 })
 export class AppModule {}

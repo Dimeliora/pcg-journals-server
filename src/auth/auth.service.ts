@@ -15,8 +15,8 @@ import {
   getUserAlreadyExistsError,
 } from './auth.constants';
 import { AuthDTO } from './dto/auth.dto';
-import { UserDocument } from 'src/users/schemas/user.schema';
-import { SafeUser } from 'src/users/interfaces/safeUser.interface';
+import { UserDocument } from '../users/schemas/user.schema';
+import { SafeUser } from '../users/interfaces/safeUser.interface';
 import { IAuthentication } from './interfaces/authentication.interface';
 
 @Injectable()
