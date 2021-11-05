@@ -6,3 +6,5 @@ export const COMPUTER_NOT_FOUND = 'АРМ/сервер не найден';
 
 export const getComputerUpdatedMessage = (pcName: string): string =>
   `Конфигурация ${pcName} изменена`;
+export const getComputerDeletedMessage = (pcName: string): string =>
+  `АРМ/сервер ${pcName} удалён`;

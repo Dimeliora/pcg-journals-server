@@ -5,6 +5,7 @@ import {
   Get,
   Post,
   Patch,
+  Delete,
   Body,
   Param,
   Request,
@@ -49,5 +50,10 @@ export class ComputersController {
       req.user.username,
       id,
     );
+  }
+
+  @Delete(':id')
+  deleteComputer(@Param('id') id: string) {
+    return this.computersService.deleteComputer(id);
   }
 }

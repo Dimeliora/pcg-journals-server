@@ -8,6 +8,7 @@ import { CreateComputerDTO } from './dto/create-computer.dto';
 import {
   COMPUTER_NOT_FOUND,
   getComputerUpdatedMessage,
+  getComputerDeletedMessage,
 } from './computer.constants';
 import { ISuccessMessage } from '../../interfaces/successMessage.interface';
 
@@ -44,7 +45,8 @@ export class ComputersService {
     computer.lastModifier = modifier;
 
     await computer.save();
-    return computer;
+
+    return await computer.populate('lastModifier', 'username');
   }
 
   async updateComputer(
@@ -61,5 +63,12 @@ export class ComputersService {
 
     await computer.save();
     return { message: getComputerUpdatedMessage(computer.pcName) };
+  }
+
+  async deleteComputer(id: string): Promise<ISuccessMessage> {
+    const computer = await this.getComputerById(id);
+
+    await computer.delete();
+    return { message: getComputerDeletedMessage(computer.pcName) };
   }
 }
