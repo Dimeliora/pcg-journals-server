@@ -76,7 +76,7 @@ export class Computer extends Base {
   ramTotalModules: string;
 
   @Prop([RamModule])
-  ramModules: RamModule;
+  ramModules: RamModule[];
 
   @Prop()
   raid: string;
@@ -88,10 +88,10 @@ export class Computer extends Base {
   totalDiskSpace: string;
 
   @Prop([HDD])
-  disks: HDD;
+  disks: HDD[];
 
   @Prop([PCBackup])
-  pcBackups: PCBackup;
+  pcBackups: PCBackup[];
 
   @Prop()
   pcComments: string;

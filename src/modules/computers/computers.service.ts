@@ -5,7 +5,11 @@ import { Model } from 'mongoose';
 import { UsersService } from '../users/users.service';
 import { Computer, ComputerDocument } from './schemas/computer.schema';
 import { CreateComputerDTO } from './dto/create-computer.dto';
-import { COMPUTER_NOT_FOUND } from './computer.constants';
+import {
+  COMPUTER_NOT_FOUND,
+  getComputerUpdatedMessage,
+} from './computer.constants';
+import { ISuccessMessage } from '../../interfaces/successMessage.interface';
 
 @Injectable()
 export class ComputersService {
@@ -41,5 +45,21 @@ export class ComputersService {
 
     await computer.save();
     return computer;
+  }
+
+  async updateComputer(
+    createComputerDto: CreateComputerDTO,
+    username: string,
+    id: string,
+  ): Promise<ISuccessMessage> {
+    const computer = await this.getComputerById(id);
+
+    await computer.updateOne(createComputerDto);
+
+    const modifier = await this.userService.getUserByUsername(username);
+    computer.lastModifier = modifier;
+
+    await computer.save();
+    return { message: getComputerUpdatedMessage(computer.pcName) };
   }
 }

@@ -1,4 +1,4 @@
-import { Model, Document } from 'mongoose';
+import { Model } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { genSalt, hash } from 'bcryptjs';
@@ -6,7 +6,6 @@ import { genSalt, hash } from 'bcryptjs';
 import { RolesService } from '../roles/roles.service';
 import { User, UserDocument } from './schemas/user.schema';
 import { ISuccessMessage } from '../../interfaces/successMessage.interface';
-import { SafeUser } from './interfaces/safeUser.interface';
 import { USER_NOT_FOUND_ERROR } from '../auth/auth.constants';
 import {
   getUserPasswordUpdatedMessage,
@@ -34,12 +33,20 @@ export class UsersService {
   }
 
   async getUserByUsername(username: string): Promise<UserDocument> {
-    const user = await this.userModel
-      .findOne({ username })
-      .populate('roles')
-      .exec();
+    try {
+      const user = await this.userModel
+        .findOne({ username })
+        .populate('roles')
+        .exec();
 
-    return user;
+      if (!user) {
+        throw new Error();
+      }
+
+      return user;
+    } catch (error) {
+      throw new NotFoundException(USER_NOT_FOUND_ERROR);
+    }
   }
 
   async getAllUsers(): Promise<UserDocument[]> {

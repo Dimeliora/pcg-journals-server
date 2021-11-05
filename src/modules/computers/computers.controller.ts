@@ -2,10 +2,11 @@ import {
   UsePipes,
   UseGuards,
   Controller,
-  Body,
-  Post,
-  Param,
   Get,
+  Post,
+  Patch,
+  Body,
+  Param,
   Request,
 } from '@nestjs/common';
 
@@ -34,6 +35,19 @@ export class ComputersController {
     return this.computersService.createComputer(
       createComputerDTO,
       req.user.username,
+    );
+  }
+
+  @Patch(':id')
+  updateComputer(
+    @Body() createComputerDTO: CreateComputerDTO,
+    @Request() req: IRequestWithUser,
+    @Param('id') id: string,
+  ) {
+    return this.computersService.updateComputer(
+      createComputerDTO,
+      req.user.username,
+      id,
     );
   }
 }
