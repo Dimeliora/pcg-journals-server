@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common';
 
 import { ComputersService } from './computers.service';
-import { ValidationPipe } from '../pipes/validation.pipe';
+import { ValidationPipe } from '../../pipes/validation.pipe';
 import { JWTGuard } from '../auth/guards/jwt.guard';
 import { CreateComputerDTO } from './dto/create-computer.dto';
-import { IRequestWithUser } from '../interfaces/requestWithUser.interface';
+import { IRequestWithUser } from '../../interfaces/requestWithUser.interface';
 
 @UseGuards(JWTGuard)
 @Controller('computers')

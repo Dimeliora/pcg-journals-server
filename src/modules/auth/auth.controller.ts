@@ -11,11 +11,11 @@ import {
 
 import { AuthService } from './auth.service';
 import { AuthDTO } from './dto/auth.dto';
-import { ValidationPipe } from '../pipes/validation.pipe';
+import { ValidationPipe } from '../../pipes/validation.pipe';
 import { Roles } from './decorators/roles.decorator';
 import { RolesGuard } from './guards/roles.guard';
 import { JWTGuard } from './guards/jwt.guard';
-import { IRequestWithUser } from '../interfaces/requestWithUser.interface';
+import { IRequestWithUser } from '../../interfaces/requestWithUser.interface';
 
 @Controller('auth')
 export class AuthController {

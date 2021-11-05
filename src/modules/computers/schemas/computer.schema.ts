@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-import { Base } from '../../interfaces/base.interface';
+import { Base } from '../../../interfaces/base.interface';
 import { User } from '../../users/schemas/user.schema';
 import { RamModule, HDD, PCBackup } from '../dto/create-computer.dto';
 

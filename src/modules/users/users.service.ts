@@ -5,8 +5,8 @@ import { genSalt, hash } from 'bcryptjs';
 
 import { RolesService } from '../roles/roles.service';
 import { User, UserDocument } from './schemas/user.schema';
-import { ISuccessMessage } from '../interfaces/successMessage.interface';
-import { SafeUser } from '../users/interfaces/safeUser.interface';
+import { ISuccessMessage } from '../../interfaces/successMessage.interface';
+import { SafeUser } from './interfaces/safeUser.interface';
 import { USER_NOT_FOUND_ERROR } from '../auth/auth.constants';
 import {
   getUserPasswordUpdatedMessage,

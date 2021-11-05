@@ -1,9 +1,10 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 import {
-  NOT_AN_EMPTY_ERROR,
-  NOT_A_STRING_ERROR,
-} from '../../constants/validation.constants';
+  NOT_AN_EMPTY_PCTYPE_ERROR,
+  NOT_AN_EMPTY_PCNAME_ERROR,
+  NOT_AN_EMPTY_PCPURPOSE_ERROR,
+} from '../computer.constants';
 
 export class RamModule {
   ramModuleSize: string;
@@ -23,16 +24,13 @@ export class PCBackup {
 }
 
 export class CreateComputerDTO {
-  @IsNotEmpty({ message: NOT_AN_EMPTY_ERROR })
-  @IsString({ message: NOT_A_STRING_ERROR })
+  @IsNotEmpty({ message: NOT_AN_EMPTY_PCTYPE_ERROR })
   pcType: string;
 
-  @IsNotEmpty({ message: NOT_AN_EMPTY_ERROR })
-  @IsString({ message: NOT_A_STRING_ERROR })
+  @IsNotEmpty({ message: NOT_AN_EMPTY_PCNAME_ERROR })
   pcName: string;
 
-  @IsNotEmpty({ message: NOT_AN_EMPTY_ERROR })
-  @IsString({ message: NOT_A_STRING_ERROR })
+  @IsNotEmpty({ message: NOT_AN_EMPTY_PCPURPOSE_ERROR })
   pcPurpose: string;
 
   formFactor: string;

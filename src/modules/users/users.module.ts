@@ -5,7 +5,7 @@ import { User, UserSchema } from './schemas/user.schema';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { RolesModule } from '../roles/roles.module';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
 
 @Module({
   imports: [
