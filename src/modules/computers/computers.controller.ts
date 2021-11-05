@@ -27,6 +27,11 @@ export class ComputersController {
     return this.computersService.getComputerById(id);
   }
 
+  @Get()
+  getAllComputers() {
+    return this.computersService.getAllComputers();
+  }
+
   @UsePipes(ValidationPipe)
   @Post()
   createComputer(

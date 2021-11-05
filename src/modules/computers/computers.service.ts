@@ -35,6 +35,15 @@ export class ComputersService {
     }
   }
 
+  async getAllComputers(): Promise<ComputerDocument[]> {
+    const computers = await this.computerModel
+      .find()
+      .populate('lastModifier', 'username')
+      .exec();
+
+    return computers;
+  }
+
   async createComputer(
     createComputerDto: CreateComputerDTO,
     username: string,
