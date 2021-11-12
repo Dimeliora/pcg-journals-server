@@ -33,20 +33,12 @@ export class UsersService {
   }
 
   async getUserByUsername(username: string): Promise<UserDocument> {
-    try {
-      const user = await this.userModel
-        .findOne({ username })
-        .populate('roles')
-        .exec();
+    const user = await this.userModel
+      .findOne({ username })
+      .populate('roles')
+      .exec();
 
-      if (!user) {
-        throw new Error();
-      }
-
-      return user;
-    } catch (error) {
-      throw new NotFoundException(USER_NOT_FOUND_ERROR);
-    }
+    return user;
   }
 
   async getAllUsers(): Promise<UserDocument[]> {
