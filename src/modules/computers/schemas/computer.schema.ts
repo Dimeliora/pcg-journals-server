@@ -18,88 +18,88 @@ export class Computer extends Base {
   @Prop({ type: String, required: true })
   pcPurpose: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   formFactor: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   motherboard: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   typeOfSocket: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   numOfSockets: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   maxRamSize: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   sataType: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   numOfSataPorts: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   numOfPsu: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   psuPower: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   os: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   numOfCpu: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   cpuModel: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   numOfCores: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   cpuFrequency: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   cpuL1Cache: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   cpuL2Cache: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   cpuL3Cache: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   ramType: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   ramTotalModules: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   ramTotalSize: string;
 
   @Prop([RamModule])
   ramModules: RamModule[];
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   raid: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   raidMode: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   totalDiskSpace: string;
 
   @Prop([HDD])
   disks: HDD[];
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   cpuUpgrade: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   ramUpgrade: string;
 
-  @Prop({ type: String, default: 'н/д' })
+  @Prop({ type: String, default: '' })
   hddUpgrade: string;
 
   @Prop([PCBackup])
