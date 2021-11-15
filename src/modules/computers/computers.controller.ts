@@ -22,11 +22,6 @@ import { IRequestWithUser } from '../../interfaces/requestWithUser.interface';
 export class ComputersController {
   constructor(private readonly computersService: ComputersService) {}
 
-  @Get(':id')
-  getComputer(@Param('id') id: string) {
-    return this.computersService.getComputerById(id);
-  }
-
   @Get()
   getAllComputers() {
     return this.computersService.getAllComputers();

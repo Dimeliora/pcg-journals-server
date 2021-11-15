@@ -20,22 +20,6 @@ export class ComputersService {
     private readonly userService: UsersService,
   ) {}
 
-  async getComputerById(id: string): Promise<ComputerDocument> {
-    try {
-      const computer = await this.computerModel
-        .findById(id)
-        .populate('lastModifier', 'username')
-        .exec();
-      if (!computer) {
-        throw new Error();
-      }
-
-      return computer;
-    } catch (error) {
-      throw new NotFoundException(COMPUTER_NOT_FOUND);
-    }
-  }
-
   async getAllComputers(): Promise<ComputerDocument[]> {
     const computers = await this.computerModel
       .find()
@@ -66,21 +50,27 @@ export class ComputersService {
     username: string,
     id: string,
   ): Promise<ISuccessMessage> {
-    const computer = await this.getComputerById(id);
+    try {
+      const computer = await this.computerModel
+        .findByIdAndUpdate(id, createComputerDto, { new: true })
+        .exec();
 
-    await computer.updateOne(createComputerDto);
+      const modifier = await this.userService.getUserByUsername(username);
+      computer.lastModifier = modifier;
+      await computer.save();
 
-    const modifier = await this.userService.getUserByUsername(username);
-    computer.lastModifier = modifier;
-
-    await computer.save();
-    return { message: getComputerUpdatedMessage(computer.pcName) };
+      return { message: getComputerUpdatedMessage(computer.pcName) };
+    } catch (error) {
+      throw new NotFoundException(COMPUTER_NOT_FOUND);
+    }
   }
 
   async deleteComputer(id: string): Promise<ISuccessMessage> {
-    const computer = await this.getComputerById(id);
-
-    await computer.delete();
-    return { message: getComputerDeletedMessage(computer.pcName) };
+    try {
+      const computer = await this.computerModel.findByIdAndRemove(id).exec();
+      return { message: getComputerDeletedMessage(computer.pcName) };
+    } catch (error) {
+      throw new NotFoundException(COMPUTER_NOT_FOUND);
+    }
   }
 }
