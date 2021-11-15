@@ -7,6 +7,7 @@ import { Computer, ComputerDocument } from './schemas/computer.schema';
 import { CreateComputerDTO } from './dto/create-computer.dto';
 import {
   COMPUTER_NOT_FOUND,
+  getComputerCreatedMessage,
   getComputerUpdatedMessage,
   getComputerDeletedMessage,
 } from './computer.constants';
@@ -47,7 +48,7 @@ export class ComputersService {
   async createComputer(
     createComputerDto: CreateComputerDTO,
     username: string,
-  ): Promise<ComputerDocument> {
+  ): Promise<ISuccessMessage> {
     const computer = new this.computerModel(createComputerDto);
 
     const modifier = await this.userService.getUserByUsername(username);
@@ -55,7 +56,9 @@ export class ComputersService {
 
     await computer.save();
 
-    return await computer.populate('lastModifier', 'username');
+    return {
+      message: getComputerCreatedMessage(computer.pcName),
+    };
   }
 
   async updateComputer(
