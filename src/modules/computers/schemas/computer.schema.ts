@@ -3,12 +3,7 @@ import { Document, Types } from 'mongoose';
 
 import { Base } from '../../../interfaces/base.interface';
 import { User } from '../../users/schemas/user.schema';
-import {
-  RamModule,
-  HDD,
-  PCBackup,
-  PCComment,
-} from '../dto/create-computer.dto';
+import { RamModule, HDD, PCBackup } from '../dto/create-computer.dto';
 
 export type ComputerDocument = Computer & Document;
 
@@ -110,8 +105,8 @@ export class Computer extends Base {
   @Prop([PCBackup])
   pcBackups: PCBackup[];
 
-  @Prop([PCComment])
-  pcComments: PCComment[];
+  @Prop({ type: String, default: '' })
+  pcComments: string;
 
   @Prop({ type: Types.ObjectId, ref: User.name })
   lastModifier: User;

@@ -23,12 +23,6 @@ export class PCBackup {
   backupStorage: string;
 }
 
-export class PCComment {
-  commentUsername: string;
-  commentDate: string;
-  commentText: string;
-}
-
 export class CreateComputerDTO {
   @IsNotEmpty({ message: NOT_AN_EMPTY_PCTYPE_ERROR })
   pcType: string;
@@ -62,5 +56,5 @@ export class CreateComputerDTO {
   totalDiskSpace: string;
   disks: HDD[];
   pcBackups: PCBackup[];
-  pcComments: PCComment[];
+  pcComments: string;
 }
